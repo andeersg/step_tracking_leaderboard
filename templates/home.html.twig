@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<header class="site-header">
+  <h1 class="site-title"><span class="p1">Skritt</span><span class="p2">konkurransen</span><span class="year">2021<span></h1>
+</header>
+
+<section class="leaderboard">
+  {# Loop through items. #}
+
+  {% for user in users %}
+      <article class="leaderboard__item">
+        <div class="position">{{loop.index}}</div>
+
+      <div class="details">
+        <div class="avatar">
+          <div class="avatar__image"></div>
+        </div>
+        <h2 class="name">{{user.name}}</h2>
+        <div class="steps">
+          <div class="steps__value">{{user.steps}}</div>
+          <div class="steps__label">Steps</div>
+        </div>
+        <div class="progress">
+          <span class="progress__bar" style="width: {{user.percentage}}%;"></span>
+        </div>
+      </div>
+    </article>
+  {% endfor %}
+</section
+
+
+{% endblock %}

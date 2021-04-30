@@ -1,3 +1,15 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+index:
+    path: /
+    controller: App\Controller\AppController::index
+
+authenticate:
+    path: /authenticate
+    controller: App\Controller\AppController::authenticate
+
+logout:
+    path: /logout
+    controller: App\Controller\AppController::logout
+
+debug:
+    path: /debug
+    controller: App\Controller\AppController::debug

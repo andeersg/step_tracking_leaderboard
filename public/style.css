@@ -1,0 +1,113 @@
+:root {
+  --bar-height: 10px;;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.site-header {
+  background-color: #f9a86f;
+  padding: 50px;
+}
+
+.site-title {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.site-title .p1 {
+  grid-row: 1;
+  grid-column: 1;
+}
+.site-title .p2 {
+  grid-row: 2;
+  grid-column: 1;
+}
+.site-title .year {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  font-size: 2em;
+}
+
+/* Leaderboard */
+.leaderboard {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,.1),0 0 32px 0 rgba(0,0,0,.14);
+}
+.leaderboard__item {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  border-bottom: 1px solid #e0e0e0;
+}
+.position {
+  background-color: #eee;
+  color: #585858;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.details {
+  padding: 10px;
+  display: grid;
+  grid-template-areas: "avatar name steps"
+  "avatar progress progress";
+  grid-template-columns: 60px 1fr 1fr;
+  grid-template-rows: 1fr calc(var(--bar-height) + 10px);
+  gap: 10px;
+}
+
+.avatar {
+  grid-area: avatar;
+  display: flex;
+  align-items: center;
+}
+.avatar__image {
+  border-radius: 50%;
+  background-color: gray;
+  height: 60px;
+  width: 60px;
+}
+
+.name {
+  grid-area: name;
+  margin: 0;
+  align-self: center;
+}
+.steps {
+  grid-area: steps;
+  text-align: right;
+}
+.steps__value {
+  font-weight: 700;
+  font-size: 26px;
+}
+.steps__label {
+  text-transform: uppercase;
+}
+
+.progress {
+  grid-area: progress;
+  height: var(--bar-height);
+  background-color: #eee;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+}
+.progress__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--bar-height);
+  background-color: #f07171;
+}
