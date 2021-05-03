@@ -45,7 +45,10 @@ class GoogleService {
 
     foreach ($raw_data['bucket'] as $day) {
       $start = $day['startTimeMillis'];
-      $steps = $day['dataset'][0]['point'][0]['value'][0]['intVal'];
+      $steps = 0;
+      if (isset($day['dataset'][0]) && isset($day['dataset'][0]['point'][0]) && isset($day['dataset'][0]['point'][0]['value'][0]['intVal'])) {
+        $steps = $day['dataset'][0]['point'][0]['value'][0]['intVal'];
+      }
       $result[$start] = $steps;
     }
 

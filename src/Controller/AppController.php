@@ -9,37 +9,73 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Service\GoogleService;
 use App\Entity\User;
 use App\Service\SettingsService;
+use App\Repository\UserRepository;
+use Psr\Log\LoggerInterface;
 
 class AppController extends AbstractController {
 
-  public function index(SessionInterface $session, GoogleService $googleService): Response {
+  public function index(SessionInterface $session, GoogleService $googleService, UserRepository $userRepo, LoggerInterface $logger): Response {
     $client = $googleService->getClient();
 
     if ($session->get('access_token')) {
+      $output_data = [];
+      $best = 0;
+      $total_steps = 0;
+
+      $users = $userRepo->findAll();
+
+      foreach ($users as $user) {
+        $logger->info('ID: ' . $user->getId() . ', Mail: ' . $user->getMail());
+        $stepsTaken = 0;
+        $steps = $user->getStepData();
+        foreach ($steps as $stepData) {
+          $stepsTaken += $stepData->getSteps();
+        }
+
+        $output_data[] = [
+          'name' => $user->getName() ?: $user->getMail(),
+          'steps' => number_format($stepsTaken, 0, ',', '.'),
+          'raw_steps' => $stepsTaken,
+          'percentage' => 0, // Calculate this somehow.
+        ];
+
+        // Keep track of the best.
+        $best = $stepsTaken > $best ? $stepsTaken : $best;
+        $total_steps += $stepsTaken;
+      }
+
+      foreach ($output_data as $key => $item) {
+        $output_data[$key]['percentage'] = floor(($item['raw_steps'] / $best) * 100);
+      }
+
+      $sample = [
+        [
+          'name' => 'Anders Grendstadbakk',
+          'steps' => number_format(300123, 0, ',', '.'),
+          'percentage' => 100,
+        ],
+        [
+          'name' => 'Ola Nordmann',
+          'steps' => number_format(298000, 0, ',', '.'),
+          'percentage' => 96,
+        ],
+        [
+          'name' => 'Kari Nordmann',
+          'steps' => number_format(257000, 0, ',', '.'),
+          'percentage' => 94,
+        ],
+        [
+          'name' => 'Per Nordmann',
+          'steps' => number_format(30000, 0, ',', '.'),
+          'percentage' => 10,
+        ],
+      ];
+
       // Authenticated
       $response = $this->render('home.html.twig', [
-        'users' => [
-          [
-            'name' => 'Anders Grendstadbakk',
-            'steps' => number_format(300123, 0, ',', '.'),
-            'percentage' => 100,
-          ],
-          [
-            'name' => 'Ola Nordmann',
-            'steps' => number_format(298000, 0, ',', '.'),
-            'percentage' => 96,
-          ],
-          [
-            'name' => 'Kari Nordmann',
-            'steps' => number_format(257000, 0, ',', '.'),
-            'percentage' => 94,
-          ],
-          [
-            'name' => 'Per Nordmann',
-            'steps' => number_format(30000, 0, ',', '.'),
-            'percentage' => 10,
-          ],
-        ],
+        'users' => $output_data,
+        'total_steps' => number_format($total_steps, 0, ',', '.'),
+        'total_distance' => number_format($total_steps * 0.0008, 0, ',', '.'),
       ]);
     }
     else {

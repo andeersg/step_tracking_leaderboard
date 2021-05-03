@@ -8,11 +8,21 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; */
+  font-family: 'Rubik', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
+h2 {
+  margin: 0 0 10px 0;
+}
+
+
 .site-header {
-  background-color: #f9a86f;
+  background-color: rgb(235, 95, 60);
+  color: #FFF;
   padding: 50px;
 }
 
@@ -35,14 +45,31 @@ body {
   font-size: 2em;
 }
 
+.site-content {
+  flex: 1;
+}
+.site-content__grid {
+  display: grid;
+  grid-template-areas: ". main sidebar .";
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  gap: 30px;
+  padding: 50px;
+  align-items: flex-start; /* Prevent items from taking full height */
+}
+
+
 /* Leaderboard */
 .leaderboard {
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
+  grid-area: main;
   box-shadow: 0 1px 4px 0 rgba(0,0,0,.1),0 0 32px 0 rgba(0,0,0,.14);
 }
+
+.leaderboard h2 {
+  border-bottom: 1px solid #e0e0e0;
+  margin: 0;
+  padding: 10px;
+}
+
 .leaderboard__item {
   display: grid;
   grid-template-columns: 50px 1fr;
@@ -110,4 +137,51 @@ body {
   left: 0;
   height: var(--bar-height);
   background-color: #f07171;
+}
+.progress__bar--full {
+  background-color: rgb(81, 154, 253);
+}
+
+/* Stats List */
+.stats {
+  grid-area: sidebar;
+  background-color: #FFF;
+  box-shadow: 0 1px 4px 0 rgba(0,0,0,.1),0 0 32px 0 rgba(0,0,0,.14);
+}
+.stats h2 {
+  border-bottom: 1px solid #e0e0e0;
+  margin: 0;
+  padding: 10px;
+}
+.stats__body {
+  padding: 20px;
+}
+
+
+.stats .label {
+  font-size: 26px;
+  color: #6e6e6e;
+}
+.stats__list {
+  padding: 0;
+  margin-top: 0;
+  font-size: 32px;
+}
+.stats__item {
+  list-style: none;
+}
+
+.color_1 {
+  color: rgb(235, 95, 60);
+}
+.color_2 {
+  color: rgb(81, 154, 253);
+}
+.color_3 {
+  color: rgb(238, 172, 74);
+}
+
+
+.catch-leader {
+  grid-area: sidebar;
 }

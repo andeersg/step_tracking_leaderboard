@@ -89,12 +89,20 @@ class StepFetcherCommand extends Command
             // Store in database.
             foreach ($result as $ts => $steps) {
                 $stepObject = $this->em->getRepository(StepData::class)->findOneBy([
-                    'user_id' => $user['id'],
-                    'date' => '',
+                    'user_id' => $user->getId(),
+                    'date' => new \DateTime(date('o-m-d 00:00:00', $ts / 1000)),
                 ]);
-            }
+                if (!$stepObject) {
+                    $stepObject = new StepData();
+                    $stepObject->setDate(new \DateTime(date('o-m-d 00:00:00', $ts / 1000)));
+                    $stepObject->setUserId($user);
+                    $this->em->persist($stepObject);
+                }
 
-            $io->note(json_encode($result));
+                $stepObject->setSteps($steps);
+
+                $this->em->flush();
+            }
         }
 
         $io->success(sprintf('Finished with "%d" users', $count));
