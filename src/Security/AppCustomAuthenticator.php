@@ -63,6 +63,7 @@ class AppCustomAuthenticator extends AbstractGuardAuthenticator
         else {
             // Save refresh_token to database and create profile.
             $user = new User();
+            $user->setUsername($token_data['email']);
             $user->setGoogleId($token_data['sub']);
             $user->setMail($token_data['email']);
             $user->setRefreshToken($refresh_token);
