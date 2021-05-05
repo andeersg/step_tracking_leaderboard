@@ -49,6 +49,9 @@ class AppController extends AbstractController {
       }
 
       foreach ($output_data as $key => $item) {
+        if ($best === 0) {
+          continue;
+        }
         $output_data[$key]['percentage'] = floor(($item['raw_steps'] / $best) * 100);
       }
 
