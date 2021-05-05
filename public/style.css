@@ -24,28 +24,11 @@ h2 {
 .site-header {
   background-color: rgb(235, 95, 60);
   color: #FFF;
-  padding: 50px;
+  padding: 10px;
 }
 
 .site-title {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  grid-template-rows: 1fr 1fr;
   margin: 0;
-}
-.site-title .p1 {
-  grid-row: 1;
-  grid-column: 1;
-}
-.site-title .p2 {
-  grid-row: 2;
-  grid-column: 1;
-}
-.site-title .year {
-  grid-row: 1 / span 2;
-  grid-column: 2;
-  font-size: 2.2em;
-  text-align: right;
 }
 
 .site-content {

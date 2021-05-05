@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210430115822 extends AbstractMigration
+final class Version20210505103711 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,13 +20,14 @@ final class Version20210430115822 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE step_data (id INT AUTO_INCREMENT NOT NULL, user_id_id INT NOT NULL, date DATE NOT NULL, steps INT DEFAULT NULL, INDEX IDX_E3656E329D86650F (user_id_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE step_data ADD CONSTRAINT FK_E3656E329D86650F FOREIGN KEY (user_id_id) REFERENCES user (id)');
+        $this->addSql('ALTER TABLE user ADD username VARCHAR(180) NOT NULL, ADD roles LONGTEXT NOT NULL COMMENT \'(DC2Type:json)\', DROP name');
+        $this->addSql('CREATE UNIQUE INDEX UNIQ_8D93D649F85E0677 ON user (username)');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE step_data');
+        $this->addSql('DROP INDEX UNIQ_8D93D649F85E0677 ON user');
+        $this->addSql('ALTER TABLE user ADD name VARCHAR(255) CHARACTER SET utf8mb4 DEFAULT NULL COLLATE `utf8mb4_unicode_ci`, DROP username, DROP roles');
     }
 }

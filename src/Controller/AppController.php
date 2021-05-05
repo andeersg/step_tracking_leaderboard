@@ -18,7 +18,7 @@ class AppController extends AbstractController {
   public function index(SessionInterface $session, GoogleService $googleService, UserRepository $userRepo, LoggerInterface $logger): Response {
     $client = $googleService->getClient();
 
-    if ($session->get('access_token')) {
+    if ($this->isGranted('ROLE_USER')) {
       $output_data = [];
       $best = 0;
       $total_steps = 0;
@@ -34,7 +34,7 @@ class AppController extends AbstractController {
         }
 
         $output_data[] = [
-          'name' => $user->getName() ?: $user->getMail(),
+          'name' => $user->getUsername() ?: $user->getMail(),
           'steps' => number_format($stepsTaken, 0, ',', '.'),
           'raw_steps' => $stepsTaken,
           'percentage' => 0, // Calculate this somehow.
@@ -93,45 +93,6 @@ class AppController extends AbstractController {
   }
 
   public function authenticate(SessionInterface $session, Request $request, GoogleService $googleService) {
-    $client = $googleService->getClient();
-
-    if ($request->query->get('code')) {
-      $entityManager = $this->getDoctrine()->getManager();
-      $code = $request->query->get('code');
-
-      $token = $client->fetchAccessTokenWithAuthCode($code);
-      $client->setAccessToken($token);
-      $refresh_token = $client->getRefreshToken();
-      $token_data = $client->verifyIdToken();
-
-
-      $repository = $this->getDoctrine()->getRepository(User::class);
-      $user = $repository->findOneBy(['google_id' => $token_data['sub']]);
-      if ($user) {
-        // Already created, don't create them.
-        if (!$user->getRefreshToken() && $refresh_token) {
-          $user->setRefreshToken($refresh_token);
-        }
-      }
-      else {
-        // Save refresh_token to database and create profile.
-        $user = new User();
-        $user->setGoogleId($token_data['sub']);
-        $user->setMail($token_data['email']);
-        $user->setRefreshToken($refresh_token);
-
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
-        $entityManager->persist($user);
-      }
-      
-      // actually executes the queries (i.e. the INSERT query)
-      $entityManager->flush();
-      
-      // Set token in session and redirect to home or profile.
-      $session->set('access_token', $token);
-
-      return $this->redirectToRoute('index');
-    }
 
   }
 
