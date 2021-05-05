@@ -1,0 +1,15 @@
+<div class="box">
+  <h2 class="box__title">Innstillinger</h2>
+  <div class="box__body">
+    {{ form_start(profile_form) }}
+      {{ form_errors(profile_form) }}
+
+      <div class="form-item">
+        {{ form_label(profile_form.name, null, {'label_attr': {'class': 'form-item__label'}}) }}
+        {{ form_widget(profile_form.name, {'attr': {'class': 'form-item__input'}}) }}
+      </div>
+
+      {{ form_widget(profile_form.save, {'attr': {'class': 'form-submit'}}) }}
+    {{ form_end(profile_form) }}
+  </div>
+</div>

@@ -10,6 +10,7 @@ use App\Service\GoogleService;
 use App\Entity\User;
 use App\Service\SettingsService;
 use App\Repository\UserRepository;
+use App\Form\Type\UserEdit;
 use Psr\Log\LoggerInterface;
 
 class AppController extends AbstractController {
@@ -71,11 +72,14 @@ class AppController extends AbstractController {
         ],
       ];
 
+      $profile_form = $this->createForm(UserEdit::class);
+
       // Authenticated
       $response = $this->render('home.html.twig', [
         'users' => $output_data,
         'total_steps' => number_format($total_steps, 0, ',', '.'),
         'total_distance' => number_format($total_steps * 0.0008, 0, ',', '.'),
+        'profile_form' => $profile_form->createView(),
       ]);
     }
     else {
@@ -147,5 +151,27 @@ class AppController extends AbstractController {
       ], TRUE),
     ]);
   }
+
+  public function saveProfile(Request $request): Response {
+    $user = new User();
+
+    $form = $this->createForm(UserEdit::class, $user);
+
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+      // $form->getData() holds the submitted values
+      // but, the original `$task` variable has also been updated
+      $user = $form->getData();
+
+      // ... perform some action, such as saving the task to the database
+      // for example, if Task is a Doctrine entity, save it!
+      // $entityManager = $this->getDoctrine()->getManager();
+      // $entityManager->persist($task);
+      // $entityManager->flush();
+
+      return $this->redirectToRoute('index');
+    }
+  }
+
 
 }
