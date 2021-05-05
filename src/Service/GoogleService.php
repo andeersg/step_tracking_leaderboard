@@ -7,25 +7,20 @@ use Google_Service_Fitness;
 
 class GoogleService {
 
-  protected $client = NULL;
-
-  public function __construct()
+  public function getClient()
   {
     $redirect_uri = $_ENV["GOOGLE_REDIRECT_URI"];
 
-    $this->client = new Client();
-    $this->client->setApplicationName("Step Tracker");
-    $this->client->setAuthConfig(__DIR__ . '/../../client_secret.json');
-    $this->client->addScope(Google_Service_Fitness::FITNESS_ACTIVITY_READ);
-    $this->client->addScope("email");
-    $this->client->setAccessType("offline");
-    $this->client->setRedirectUri($redirect_uri);
-    $this->client->setIncludeGrantedScopes(true);
-  }
+    $client = new Client();
+    $client->setApplicationName("Step Tracker");
+    $client->setAuthConfig(__DIR__ . '/../../client_secret.json');
+    $client->addScope(Google_Service_Fitness::FITNESS_ACTIVITY_READ);
+    $client->addScope("email");
+    $client->setAccessType("offline");
+    $client->setRedirectUri($redirect_uri);
+    $client->setIncludeGrantedScopes(true);
 
-  public function getClient()
-  {
-    return $this->client;
+    return $client;
   }
 
   public function calculateTimestamps($daysBack = 1)

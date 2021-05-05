@@ -56,7 +56,7 @@ class AppController extends AbstractController {
       }
 
       usort($output_data, function ($item1, $item2) {
-        return $item1['raw_steps'] <=> $item2['raw_steps'];
+        return $item2['raw_steps'] <=> $item1['raw_steps'];
       });
 
       $sample = [

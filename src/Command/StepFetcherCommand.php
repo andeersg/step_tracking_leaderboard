@@ -44,7 +44,6 @@ class StepFetcherCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $client = $this->googleService->getClient();
         $io = new SymfonyStyle($input, $output);
         $dryRun = $input->getOption('dry-run') ? TRUE : FALSE;
 
@@ -57,6 +56,7 @@ class StepFetcherCommand extends Command
         $count = 0;
 
         foreach ($users as $user) {
+            $client = $this->googleService->getClient();
             $count += 1;
 
             $io->note($user->getMail());
