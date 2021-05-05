@@ -8,7 +8,7 @@ authenticate:
 
 logout:
     path: /logout
-    controller: App\Controller\AppController::logout
+    methods: GET
 
 debug:
     path: /debug

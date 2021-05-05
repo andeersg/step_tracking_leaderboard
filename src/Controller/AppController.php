@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Service\GoogleService;
 use App\Entity\User;
 use App\Service\SettingsService;
@@ -19,6 +20,7 @@ class AppController extends AbstractController {
     $client = $googleService->getClient();
 
     if ($this->isGranted('ROLE_USER')) {
+      $loggedin_user = $this->getUser();
       $output_data = [];
       $best = 0;
       $total_steps = 0;
@@ -37,7 +39,8 @@ class AppController extends AbstractController {
           'name' => $user->getUsername() ?: $user->getMail(),
           'steps' => number_format($stepsTaken, 0, ',', '.'),
           'raw_steps' => $stepsTaken,
-          'percentage' => 0, // Calculate this somehow.
+          'percentage' => 0,
+          'me' => $loggedin_user->getId() === $user->getId(),
         ];
 
         // Keep track of the best.
@@ -48,6 +51,10 @@ class AppController extends AbstractController {
       foreach ($output_data as $key => $item) {
         $output_data[$key]['percentage'] = floor(($item['raw_steps'] / $best) * 100);
       }
+
+      usort($output_data, function ($item1, $item2) {
+        return $item1['raw_steps'] <=> $item2['raw_steps'];
+      });
 
       $sample = [
         [
@@ -72,7 +79,9 @@ class AppController extends AbstractController {
         ],
       ];
 
-      $profile_form = $this->createForm(UserEdit::class);
+      $profile_form = $this->createForm(UserEdit::class, $loggedin_user, [
+        'action' => $this->generateUrl('save_profile'),
+      ]);
 
       // Authenticated
       $response = $this->render('home.html.twig', [
@@ -93,12 +102,7 @@ class AppController extends AbstractController {
   }
 
   public function authenticate(SessionInterface $session, Request $request, GoogleService $googleService) {
-
-  }
-
-  public function logout(SessionInterface $session) {
-    $session->remove('access_token');
-    return $this->redirectToRoute('index');
+    // Logic is handled in the Authenticator.
   }
 
   public function debug(SettingsService $settings, GoogleService $googleService) {
@@ -113,22 +117,27 @@ class AppController extends AbstractController {
     ]);
   }
 
+  /**
+   * Require ROLE_USER for only this controller method.
+   *
+   * @IsGranted("ROLE_USER")
+   */
   public function saveProfile(Request $request): Response {
-    $user = new User();
+    $user = $this->getUser();
 
     $form = $this->createForm(UserEdit::class, $user);
 
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       // $form->getData() holds the submitted values
-      // but, the original `$task` variable has also been updated
+      // but, the original `$user` variable has also been updated
       $user = $form->getData();
 
-      // ... perform some action, such as saving the task to the database
+      // ... perform some action, such as saving the user to the database
       // for example, if Task is a Doctrine entity, save it!
-      // $entityManager = $this->getDoctrine()->getManager();
-      // $entityManager->persist($task);
-      // $entityManager->flush();
+      $entityManager = $this->getDoctrine()->getManager();
+//       $entityManager->persist($user);
+      $entityManager->flush();
 
       return $this->redirectToRoute('index');
     }

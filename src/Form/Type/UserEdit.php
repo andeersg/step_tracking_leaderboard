@@ -12,7 +12,7 @@ class UserEdit extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'Visningsnavn'])
+            ->add('username', TextType::class, ['label' => 'Visningsnavn'])
             ->add('save', SubmitType::class)
         ;
     }
