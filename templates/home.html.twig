@@ -3,31 +3,36 @@
 {% block body %}
 <div class="site-content">
   <div class="site-content__grid">
+    <div class="main">
+      {% if show_help %}
+        {#{ include('help.html.twig') }#}
+      {% endif %}
 
-    <section class="leaderboard">
-      {# Loop through items. #}
-      <h2>Resultater</h2>
+      <section class="leaderboard">
+        {# Loop through items. #}
+        <h2>Resultater</h2>
 
-      {% for user in users %}
-          <article class="leaderboard__item">
-            <div class="position">{{loop.index}}</div>
+        {% for user in users %}
+            <article class="leaderboard__item">
+              <div class="position">{{loop.index}}</div>
 
-          <div class="details">
-            <div class="avatar">
-              <div class="avatar__image"></div>
+            <div class="details">
+              <div class="avatar">
+                <div class="avatar__image"></div>
+              </div>
+              <h2 class="name">{{user.name}}</h2>
+              <div class="steps">
+                <div class="steps__value">{{user.steps}}</div>
+                <div class="steps__label">Skritt</div>
+              </div>
+              <div class="progress">
+                <span class="progress__bar{{user.percentage == 100 ? ' progress__bar--full' : ''}}" style="width: {{user.percentage}}%;"></span>
+              </div>
             </div>
-            <h2 class="name">{{user.name}}</h2>
-            <div class="steps">
-              <div class="steps__value">{{user.steps}}</div>
-              <div class="steps__label">Skritt</div>
-            </div>
-            <div class="progress">
-              <span class="progress__bar{{user.percentage == 100 ? ' progress__bar--full' : ''}}" style="width: {{user.percentage}}%;"></span>
-            </div>
-          </div>
-        </article>
-      {% endfor %}
-    </section>
+          </article>
+        {% endfor %}
+      </section>
+    </div>
 
     <div class="sidebar">
       {{ include('stats.html.twig') }}

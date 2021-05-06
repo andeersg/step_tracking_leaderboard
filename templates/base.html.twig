@@ -2,17 +2,17 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{{page_title|default('Skrittkonkurransen')}}</title>
         <link rel="preconnect" href="https://fonts.gstatic.com">
         {# <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet"> #}
         <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">  
         <link href="{{ asset('style.css') }}" rel="stylesheet"/>
     </head>
-    <body>
-        {{ include('header.html.twig') }}
+    <body class="page {% block body_class %}{% endblock %}">
+        {% block header %}{{ include('header.html.twig') }}{% endblock %}
 
         {% block body %}{% endblock %}
 
-        {{ include('footer.html.twig') }}
+        {% block footer %}{{ include('footer.html.twig') }}{% endblock %}
     </body>
 </html>

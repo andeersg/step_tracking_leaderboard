@@ -1,7 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-  <p>You are not logged in yet.</p>
+{# We don't want header and footer on login screen. #}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
 
-  <a href="{{login_url}}">Logg inn</a>
+{% block body %}
+<div class="login">
+  <div class="login__info">
+    <h1 class="page-title">Skrittkonkurransen 2021</h1>
+
+    <p>Logg inn med Google for å delta i skrittkonkurransen.</p>
+
+    <p>For å delta må du synce skrittene dine med Google Fit.</p>
+
+    {% if show_login %}
+      <a class="button button--cta" href="{{login_url}}">Logg inn med Google</a>
+    {% endif %}
+  </div>
+  <div class="login__image"></div>
+</div>
 {% endblock %}
