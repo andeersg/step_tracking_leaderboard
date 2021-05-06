@@ -59,7 +59,6 @@ class StepFetcherCommand extends Command
             $client = $this->googleService->getClient();
             $count += 1;
 
-            $io->note($user->getMail());
             // Set token
             $token = $client->fetchAccessTokenWithRefreshToken($user->getRefreshToken());
             $client->setAccessToken($token['access_token']);
