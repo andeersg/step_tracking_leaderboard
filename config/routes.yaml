@@ -10,10 +10,6 @@ logout:
     path: /logout
     methods: GET
 
-debug:
-    path: /debug
-    controller: App\Controller\AppController::debug
-
 save_profile:
     path:       /profile
     controller: App\Controller\AppController::saveProfile

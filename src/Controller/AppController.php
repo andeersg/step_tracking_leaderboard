@@ -14,6 +14,9 @@ use App\Service\SettingsService;
 use App\Repository\UserRepository;
 use App\Form\Type\UserEdit;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class AppController extends AbstractController {
 
@@ -65,35 +68,12 @@ class AppController extends AbstractController {
         return $item2['raw_steps'] <=> $item1['raw_steps'];
       });
 
-      $sample = [
-        [
-          'name' => 'Anders Grendstadbakk',
-          'steps' => number_format(300123, 0, ',', '.'),
-          'percentage' => 100,
-        ],
-        [
-          'name' => 'Ola Nordmann',
-          'steps' => number_format(298000, 0, ',', '.'),
-          'percentage' => 96,
-        ],
-        [
-          'name' => 'Kari Nordmann',
-          'steps' => number_format(257000, 0, ',', '.'),
-          'percentage' => 94,
-        ],
-        [
-          'name' => 'Per Nordmann',
-          'steps' => number_format(30000, 0, ',', '.'),
-          'percentage' => 10,
-        ],
-      ];
-
       $profile_form = $this->createForm(UserEdit::class, $loggedin_user, [
         'action' => $this->generateUrl('save_profile'),
       ]);
 
       // Authenticated
-      // $this_user_steps = 0;
+      $this_user_steps = 0;
       $response = $this->render('home.html.twig', [
         'users' => $output_data,
         'total_steps' => number_format($total_steps, 0, ',', '.'),
@@ -108,7 +88,7 @@ class AppController extends AbstractController {
       // Show login.
       $response = $this->render('login.html.twig', [
         'login_url' => $client->createAuthUrl(),
-        'show_login' => $code === 'kg35',
+        'show_login' => TRUE, //$code === 'kg35',
       ]);
     }
 
@@ -117,19 +97,6 @@ class AppController extends AbstractController {
 
   public function authenticate(SessionInterface $session, Request $request, GoogleService $googleService) {
     // Logic is handled in the Authenticator.
-  }
-
-  public function debug(SettingsService $settings, GoogleService $googleService) {
-    $setting = $settings->get('contest_start');
-    $client = $googleService->getClient();
-
-    return $this->render('debug.html.twig', [
-      'page_title' => 'Debug page',
-      'data' => print_r([
-        'setting' => $setting,
-        'clienturl' => $client->createAuthUrl(),
-      ], TRUE),
-    ]);
   }
 
   /**
@@ -159,15 +126,33 @@ class AppController extends AbstractController {
   }
 
   /**
-   * @Route("/help")
+   * @Route("/page/{slug}", name="page")
    */
-  public function helpPage()
+  public function mdPage(string $slug, KernelInterface $appKernel, LoggerInterface $logger)
   {
-    return $this->render('page.html.twig', [
-      'page_title' => 'Hvordan synce?',
-      'title' => 'Hvordan synce?',
-      'content' => '<p>Slik gjør du det</p>',
-    ]);
+    $projectRoot = $appKernel->getProjectDir();
+    $finder = new Finder();
+
+    $finder->in($projectRoot . '/pages')->files()->name('*.md');
+
+    foreach ($finder as $file) {
+      $name = $file->getFilename();
+      if ($name == $slug . '.md') {
+        $yamlObject = YamlFrontMatter::parse($file->getContents());
+
+        $title = $yamlObject->matter('title');
+        $content = $yamlObject->body();
+
+        return $this->render('page.html.twig', [
+          'page_title' => $title,
+          'title' => $title,
+          'content' => $content,
+          'debug' => $content,
+        ]);
+      }
+    }
+
+    throw $this->createNotFoundException('The page does not exist');
   }
 
 

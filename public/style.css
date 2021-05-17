@@ -30,6 +30,10 @@ h2 {
 .site-title {
   margin: 0;
 }
+.site-title a {
+  color: inherit;
+  text-decoration: none;
+}
 .page-title {
   font-size: 42px;
 }
@@ -183,6 +187,10 @@ h2 {
   background-color: #FFF;
   box-shadow: 0 1px 4px 0 rgba(0,0,0,.1),0 0 32px 0 rgba(0,0,0,.14);
 }
+.box + .box {
+  margin-top: 30px;
+}
+
 .box__title {
   border-bottom: 1px solid #e0e0e0;
   margin: 0;
@@ -201,6 +209,7 @@ h2 {
 .site-footer {
   display: flex;
   justify-content: center;
+  padding: 40px;
 }
 
 
@@ -262,7 +271,7 @@ h2 {
 }
 
 .message {
-  padding: 15px 20px 15px 35px; /* LTR */
+  padding: 10px 20px 10px 30px; /* LTR */
   word-wrap: break-word;
   border: 1px solid;
   border-width: 1px 1px 1px 0;  /* LTR */
@@ -272,10 +281,10 @@ h2 {
   margin-bottom: 20px;
 }
 .message--info {
-  color: #325e1c;
-  border-color: #c9e1bd #c9e1bd #c9e1bd transparent;  /* LTR */
-  background-color: #f3faef;
-  box-shadow: -8px 0 0 #77b259; /* LTR */
+  color: #734c00;
+  border-color: #f4daa6 #f4daa6 #f4daa6 transparent;  /* LTR */
+  background-color: #fdf8ed;
+  box-shadow: -8px 0 0 #e09600; /* LTR */
 }
 
 .page-wrapper {

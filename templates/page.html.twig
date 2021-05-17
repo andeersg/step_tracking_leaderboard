@@ -5,7 +5,9 @@
     <h1>{{title}}</h1>
 
     <div>
-      {{content|raw}}
+      {% apply markdown_to_html %}
+      {{content}}
+      {% endapply %}
     </div>
   </div>
 {% endblock %}
