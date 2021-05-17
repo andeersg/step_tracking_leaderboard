@@ -33,11 +33,16 @@ class AppController extends AbstractController {
       $users = $userRepo->findAll();
 
       foreach ($users as $user) {
-        $logger->info('ID: ' . $user->getId() . ', Mail: ' . $user->getMail());
+        $me = FALSE;
         $stepsTaken = 0;
         $steps = $user->getStepData();
         foreach ($steps as $stepData) {
           $stepsTaken += $stepData->getSteps();
+        }
+
+        if ($loggedin_user->getId() === $user->getId()) {
+          $this_user_steps = $stepsTaken;
+          $me = TRUE;
         }
 
         $output_data[] = [
@@ -45,12 +50,8 @@ class AppController extends AbstractController {
           'steps' => number_format($stepsTaken, 0, ',', '.'),
           'raw_steps' => $stepsTaken,
           'percentage' => 0,
-          'me' => $loggedin_user->getId() === $user->getId(),
+          'me' => $me,
         ];
-
-        if ($loggedin_user->getId() === $user->getId()) {
-          $this_user_steps = $stepsTaken;
-        }
 
         // Keep track of the best.
         $best = $stepsTaken > $best ? $stepsTaken : $best;
@@ -73,7 +74,6 @@ class AppController extends AbstractController {
       ]);
 
       // Authenticated
-      $this_user_steps = 0;
       $response = $this->render('home.html.twig', [
         'users' => $output_data,
         'total_steps' => number_format($total_steps, 0, ',', '.'),

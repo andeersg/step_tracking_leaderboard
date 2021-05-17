@@ -13,7 +13,7 @@
         <h2>Resultater</h2>
 
         {% for user in users %}
-            <article class="leaderboard__item">
+            <article class="leaderboard__item{% if user.me %} leaderboard__item--self{% endif %}">
               <div class="position">{{loop.index}}</div>
 
             <div class="details">
