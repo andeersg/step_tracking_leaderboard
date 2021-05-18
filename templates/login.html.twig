@@ -9,13 +9,16 @@
   <div class="login__info">
     <h1 class="page-title">Skrittkonkurransen 2021</h1>
 
-    <p>Logg inn med Google for å delta i skrittkonkurransen.</p>
+    <p>Koble til med Google og synkroniser dine skritt med Google Fit for å delta i konkurransen. Konkurransen varer ut oktober og det er Sunn & Frisk-poeng å hente!</p>
 
-    <p>For å delta må du synce skrittene dine med Google Fit.</p>
+    <p>Etter at du har logget inn synkroniseres skritt daglig uten at du trenger å gjøre noe.</p>
+
 
     {% if show_login %}
       <a class="button button--cta" href="{{login_url}}">Logg inn med Google</a>
     {% endif %}
+
+    {{ include('footer.html.twig') }}
   </div>
   <div class="login__image"></div>
 </div>

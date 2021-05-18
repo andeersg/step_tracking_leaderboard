@@ -261,6 +261,9 @@ h2 {
 .login__info {
   padding: 100px;
 }
+.login__info p {
+  max-width: 800px;
+}
 .login__image {
   background-image: url('https://images.unsplash.com/photo-1578880981498-3d60436ba825?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGpvZ2dpbmd8ZW58MHx8MHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=60');
   background-size: cover;
