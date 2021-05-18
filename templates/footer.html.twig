@@ -2,6 +2,7 @@
   <nav>
     <a href="{{ path('index') }}">Hjem</a>
     <a href="{{ path('page', {slug: 'help'}) }}">Hjelp</a>
+    <a href="{{ path('page', {slug: 'privacy'}) }}">Privacy</a>
     {% if is_granted('ROLE_USER') %}
     <a href="{{ path('logout') }}">Logg ut</a>
     {% endif %}
