@@ -1,6 +1,9 @@
 ---
 title: "Personvern"
 ---
-For at dette skal fungere må vi be om tilgang til å lese **skrittdata**. I tillegg hentes e-postadressen knyttet til Google-kontoen.
+This website requires access to read fitness data so it can gather **steps per day**. We also collect your e-mail for identification.
 
-Du kan når som helst slette din konto, da fjernes all data knyttet til deg.
+The data collected is stored in our database and is not shared with anyone. Only loggedin users see the highscore list.
+
+If you want to remove your data you can delete your account and all related data will be deleted.
+
